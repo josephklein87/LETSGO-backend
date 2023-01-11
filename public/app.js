@@ -4,7 +4,7 @@ class App extends React.Component {
     }
 
     componentDidMount = () => {
-        axios.get('/people').then(
+        axios.get('/events').then(
             (response) => {
                 this.setState({
                     people:response.data
@@ -16,7 +16,7 @@ class App extends React.Component {
     createPerson = (event) => {
         event.preventDefault();
         axios.post(
-            '/people',
+            '/events',
             {
                 name:this.state.newPersonName,
                 age:this.state.newPersonAge,
@@ -57,7 +57,7 @@ class App extends React.Component {
         event.preventDefault();
         const id = event.target.getAttribute('id');
         axios.put(
-            '/people/' + id,
+            '/events/' + id,
             {
                 name:this.state.updatePersonName,
                 age:this.state.updatePersonAge,
