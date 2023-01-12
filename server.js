@@ -8,7 +8,9 @@ app.use(express.static('public'))
 app.use(cors());
 
 const eventsController = require('./controllers/events.js');
+const userController = require('./controllers/users.js')
 app.use('/events', eventsController);
+app.use('/users', userController)
 
 postgres.connect();
 
