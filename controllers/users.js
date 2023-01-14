@@ -8,9 +8,12 @@ users.post('/newUser', (req, res) => {
     req.body.password = bcrypt.hashSync(req.body.password, bcrypt.genSaltSync(10))
     console.log(req.body.password)
     postgres.query(`INSERT INTO users (username, password) VALUES ('${req.body.username}', '${req.body.password}');`, (err, results) => {
-        postgres.query('SELECT * FROM users ORDER BY id ASC;', (err, results) => {
+        if (err) {
+            res.json("There was an error")
+        } else {
+        postgres.query(`SELECT id, username FROM users WHERE username = '${req.body.username}' ORDER BY id ASC;`, (err, results) => {
             res.json(results.rows)
-    });
+    })};
 })
 });
 
@@ -22,13 +25,13 @@ users.put('/userLogin', (req, res) => {
         if (err) {
             res.json("There was an error")
         } else if (!results.rows[0]) {
-            res.json("User not found.")
+            res.json("User not found")
         } 
         else {
             if (bcrypt.compareSync(req.body.password, results.rows[0].password)) {
                 res.json({id: results.rows[0].id, username: results.rows[0].username})
             } else {
-                res.json("Password does not match.")
+                res.json("Password does not match")
             }
         }
 });

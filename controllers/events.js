@@ -8,6 +8,13 @@ router.get('/', (req, res) => {
     });
 });
 
+router.put('/test', (req, res) => {
+    console.log(req.body.city1 + req.body.state1)
+    postgres.query(`SELECT * FROM events WHERE city='${req.body.city1}' AND state='${req.body.state1}' ORDER BY id ASC;`, (err, results) => {
+        res.json(results.rows)
+    });
+});
+
 router.post('/', (req, res) => {
     console.log(req.body.name)
     postgres.query(`INSERT INTO events 
