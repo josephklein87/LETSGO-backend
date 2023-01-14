@@ -47,4 +47,10 @@ router.put('/:id', (req, res) => {
     })
 });
 
+router.get('/:id', (req, res)=>{
+    postgres.query(`SELECT * FROM events WHERE id='${req.params.id}';`, (err, results) => {
+        res.json(results.rows)
+    })
+})
+
 module.exports = router;
