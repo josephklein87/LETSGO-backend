@@ -3,14 +3,25 @@ const router = express.Router();
 const postgres = require('../postgres.js');
 
 router.get('/', (req, res) => {
-    postgres.query('SELECT * FROM events ORDER BY id ASC;', (err, results) => {
+    postgres.query('SELECT * FROM events ORDER BY date ASC;', (err, results) => {
         res.json(results.rows)
     });
 });
 
+// MAIN PAGE
+
 router.put('/test', (req, res) => {
     console.log(req.body.city1 + req.body.state1)
-    postgres.query(`SELECT * FROM events WHERE city='${req.body.city1}' AND state='${req.body.state1}' ORDER BY id ASC;`, (err, results) => {
+    postgres.query(`SELECT * FROM events WHERE city='${req.body.city1}' AND state='${req.body.state1}' ORDER BY date ASC;`, (err, results) => {
+        res.json(results.rows)
+    });
+});
+
+//find user's own submitted events
+
+router.put('/myEvents', (req, res) => {
+    console.log("test")
+    postgres.query(`SELECT * FROM events WHERE submitted_by='${req.body.thisUser}';`, (err, results) => {
         res.json(results.rows)
     });
 });
@@ -18,10 +29,10 @@ router.put('/test', (req, res) => {
 router.post('/', (req, res) => {
     console.log(req.body.name)
     postgres.query(`INSERT INTO events 
-                    (name, street, city, state, zip, outdoor, date, time, description, link, dog_friendly, picture) 
+                    (name, street, city, state, zip, outdoor, date, time, description, link, dog_friendly, picture, submitted_by) 
                     VALUES ('${req.body.name}', '${req.body.street}', '${req.body.city}', '${req.body.state}',
                     '${req.body.zip}', '${req.body.outdoor}', '${req.body.date}', '${req.body.time}', 
-                    '${req.body.description}', '${req.body.link}', '${req.body.dog_friendly}', '${req.body.picture}');`, (err, results) => {
+                    '${req.body.description}', '${req.body.link}', '${req.body.dog_friendly}', '${req.body.picture}', '${req.body.submitted_by}');`, (err, results) => {
         postgres.query('SELECT * FROM events ORDER BY id ASC;', (err, results) => {
             res.json(results.rows)
         });
@@ -47,10 +58,12 @@ router.put('/:id', (req, res) => {
     })
 });
 
+
 router.get('/:id', (req, res)=>{
     postgres.query(`SELECT * FROM events WHERE id='${req.params.id}';`, (err, results) => {
         res.json(results.rows)
     })
 })
+
 
 module.exports = router;
