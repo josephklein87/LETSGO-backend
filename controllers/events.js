@@ -17,6 +17,8 @@ router.put('/test', (req, res) => {
     });
 });
 
+
+
 // SEARCH BY DATE
 
 router.put('/date', (req, res) => {
@@ -34,6 +36,49 @@ router.put('/myEvents', (req, res) => {
         res.json(results.rows)
     });
 });
+
+//find user's saved events
+router.put('/savedEvents', (req, res) => {
+    console.log("test")
+    postgres.query(`SELECT * FROM events INNER JOIN following ON events.id = following.event_id WHERE following.username='${req.body.thisUser}' ORDER BY events.date ASC;`, (err, results) => {
+        res.json(results.rows)
+    });
+});
+
+router.put('/userFavs', (req, res) => {
+    postgres.query(`SELECT * FROM following WHERE username = '${req.body.thisUser}';`, (err, results) =>{
+        if (err) {
+            console.log("There was an error")
+        } else {
+            console.log(results.rows)
+            res.json(results.rows)
+        }
+    })
+});
+
+router.delete('/deleteFav/:thisUser/:thisEvent', (req, res) => {
+    postgres.query(`DELETE FROM following WHERE username = '${req.params.thisUser}' AND event_id=${req.params.thisEvent};`, (err, results) => {
+        postgres.query(`SELECT * FROM following WHERE username = '${req.params.thisUser}';`, (err, results) => {
+            console.log(results.rows)
+            res.json(results.rows)
+        });
+    });
+});
+
+//post user's saved events
+
+router.post('/addFav', (req, res) => {
+    postgres.query(`INSERT INTO following (username, event_id) 
+                    VALUES ('${req.body.thisUser}', '${req.body.thisEvent}');`, (err, results) => {
+        postgres.query('SELECT * FROM events ORDER BY id ASC;', (err, results) => {
+            res.json(results.rows)
+        });
+    })
+});
+
+//post event
+
+
 
 router.post('/', (req, res) => {
     console.log(req.body.name)
