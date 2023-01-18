@@ -17,6 +17,15 @@ router.put('/test', (req, res) => {
     });
 });
 
+// SEARCH BY DATE
+
+router.put('/date', (req, res) => {
+    console.log(req.body.city1 + req.body.state1 + req.body.date1)
+    postgres.query(`SELECT * FROM events WHERE city='${req.body.city1}' AND state='${req.body.state1}' AND date='${req.body.date1}' ORDER BY date ASC;`, (err, results) => {
+        res.json(results.rows)
+    });
+});
+
 //find user's own submitted events
 
 router.put('/myEvents', (req, res) => {
