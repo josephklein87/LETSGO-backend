@@ -10,7 +10,7 @@ router.get('/', (req, res) => {
 
 // MAIN PAGE
 
-router.put('/test', (req, res) => {
+router.put('/findCity', (req, res) => {
     console.log(req.body.city1 + req.body.state1)
     postgres.query(`SELECT * FROM events WHERE city='${req.body.city1}' AND state='${req.body.state1}' ORDER BY date ASC;`, (err, results) => {
         res.json(results.rows)
