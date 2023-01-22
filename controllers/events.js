@@ -97,7 +97,7 @@ router.delete('/:id', (req, res) => {
 router.put('/:id', (req, res) => {
     postgres.query(`UPDATE events SET name = '${req.body.name}', street = '${req.body.street}', city = '${req.body.city}', state = '${req.body.state}',
                                               zip = '${req.body.zip}', outdoor = '${req.body.outdoor}', date = '${req.body.date}', time = '${req.body.time}', 
-                                              description = '${req.body.description}', link = '${req.body.link}', dog_friendly = '${req.body.dog_friendly}' 
+                                              description = '${req.body.description}', link = '${req.body.link}', dog_friendly = '${req.body.dog_friendly}', picture = '${req.body.picture}' 
                                               WHERE id = '${req.params.id}';`, (err, results) => {
         postgres.query('SELECT * FROM events ORDER BY id ASC;', (err, results) => {
             res.json(results.rows)
