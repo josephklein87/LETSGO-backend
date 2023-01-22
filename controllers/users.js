@@ -4,9 +4,7 @@ const bcrypt = require('bcrypt')
 const postgres = require('../postgres.js');
   
 users.post('/newUser', (req, res) => {
-    console.log(req.body)
     req.body.password = bcrypt.hashSync(req.body.password, bcrypt.genSaltSync(10))
-    console.log(req.body.password)
     postgres.query(`INSERT INTO users (username, password) VALUES ('${req.body.username}', '${req.body.password}');`, (err, results) => {
         if (err) {
             res.json("There was an error")
@@ -19,9 +17,7 @@ users.post('/newUser', (req, res) => {
 
 
 users.put('/userLogin', (req, res) => {
-    console.log(req.body)
     postgres.query(`SELECT * FROM users WHERE username = '${req.body.username}';`, (err, results) => {
-        console.log(results.rows)
         if (err) {
             res.json("There was an error")
         } else if (!results.rows[0]) {

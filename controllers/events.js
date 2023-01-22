@@ -11,7 +11,6 @@ router.get('/', (req, res) => {
 // MAIN PAGE
 
 router.put('/findCity', (req, res) => {
-    console.log(req.body.city1 + req.body.state1)
     postgres.query(`SELECT * FROM events WHERE city='${req.body.city1}' AND state='${req.body.state1}' ORDER BY date ASC;`, (err, results) => {
         res.json(results.rows)
     });
@@ -22,7 +21,6 @@ router.put('/findCity', (req, res) => {
 // SEARCH BY DATE
 
 router.put('/date', (req, res) => {
-    console.log(req.body.city1 + req.body.state1 + req.body.date1)
     postgres.query(`SELECT * FROM events WHERE city='${req.body.city1}' AND state='${req.body.state1}' AND date='${req.body.date1}' ORDER BY date ASC;`, (err, results) => {
         res.json(results.rows)
     });
@@ -31,7 +29,6 @@ router.put('/date', (req, res) => {
 //find user's own submitted events
 
 router.put('/myEvents', (req, res) => {
-    console.log("test")
     postgres.query(`SELECT * FROM events WHERE submitted_by='${req.body.thisUser}';`, (err, results) => {
         res.json(results.rows)
     });
@@ -39,7 +36,6 @@ router.put('/myEvents', (req, res) => {
 
 //find user's saved events
 router.put('/savedEvents', (req, res) => {
-    console.log("test")
     postgres.query(`SELECT * FROM events INNER JOIN following ON events.id = following.event_id WHERE following.username='${req.body.thisUser}' ORDER BY events.date ASC;`, (err, results) => {
         res.json(results.rows)
     });
@@ -50,7 +46,6 @@ router.put('/userFavs', (req, res) => {
         if (err) {
             console.log("There was an error")
         } else {
-            console.log(results.rows)
             res.json(results.rows)
         }
     })
@@ -59,7 +54,6 @@ router.put('/userFavs', (req, res) => {
 router.delete('/deleteFav/:thisUser/:thisEvent', (req, res) => {
     postgres.query(`DELETE FROM following WHERE username = '${req.params.thisUser}' AND event_id=${req.params.thisEvent};`, (err, results) => {
         postgres.query(`SELECT * FROM following WHERE username = '${req.params.thisUser}';`, (err, results) => {
-            console.log(results.rows)
             res.json(results.rows)
         });
     });
@@ -81,7 +75,6 @@ router.post('/addFav', (req, res) => {
 
 
 router.post('/', (req, res) => {
-    console.log(req.body.name)
     postgres.query(`INSERT INTO events 
                     (name, street, city, state, zip, outdoor, date, time, description, link, dog_friendly, picture, submitted_by) 
                     VALUES ('${req.body.name}', '${req.body.street}', '${req.body.city}', '${req.body.state}',
