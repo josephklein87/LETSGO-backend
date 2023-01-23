@@ -1,6 +1,8 @@
 # LETS GO APP BACKEND
 created by Joe Klein
 
+https://letsgo.herokuapp.com/
+
 This is a backend for the LETSGO app set up using Express and Postgres.
 
 The purpose of the app is to find or submit cool events in your area, confined to three cities currently (NY / LA / CHICAGO)
